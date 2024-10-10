@@ -1,6 +1,9 @@
 package cn.moquan.leet_code;
 
 import cn.moquan.base.Doing;
+import cn.moquan.base.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +18,9 @@ import java.util.List;
  * @author :<b> wyh </b><br />
  * @date :<b> 2024/10/10 16:10 </b><br />
  */
-public class No77 implements Doing {
+public class No77 implements Doing, Log {
+
+    private static final Logger logger = LoggerFactory.getLogger(No77.class);
 
     Integer[] result;
 
@@ -39,11 +44,9 @@ public class No77 implements Doing {
 
         result = new Integer[k];
 
-        for (int i = 1; i <= maxIndex; i++) {
-            execution(i, 0);
-        }
-        System.out.println(list);
+        execution(1, 0);
 
+        logger.info("result : {}", list);
     }
 
     private void execution(int index, int deepIndex) {
@@ -52,18 +55,14 @@ public class No77 implements Doing {
             list.add(Arrays.asList(Arrays.copyOf(result, result.length)));
             return;
         }
+
         if (index > maxIndex) {
             return;
         }
 
-
-
-        result[deepIndex] = index;
-
-        int nextIndex = index;
-        for (int i = 1; i <= maxIndex; i++) {
-            nextIndex++;
-            execution(nextIndex, deepIndex + 1);
+        for (int i = index; i <= maxIndex; i++) {
+            result[deepIndex] = i;
+            execution(i + 1, deepIndex + 1);
         }
 
         result[deepIndex] = null;
