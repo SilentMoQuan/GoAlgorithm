@@ -21,11 +21,11 @@ import java.util.List;
  */
 public class No77_2 implements Doing, Log {
 
-    private static final Logger logger = LoggerFactory.getLogger(No77_2.class);
+    private static final Logger log = LoggerFactory.getLogger(No77_2.class);
 
     @Override
     public void go() {
-        logger.info("result: {}", solution(4, 2));
+        log.info("result: {}", solution(4, 2));
     }
 
     LinkedList<Integer> result = new LinkedList<>();

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class No77 implements Doing, Log {
 
-    private static final Logger logger = LoggerFactory.getLogger(No77.class);
+    private static final Logger log = LoggerFactory.getLogger(No77.class);
 
     Integer[] result;
 
@@ -46,7 +46,7 @@ public class No77 implements Doing, Log {
 
         execution(1, 0);
 
-        logger.info("result : {}", list);
+        log.info("result : {}", list);
     }
 
     private void execution(int index, int deepIndex) {
