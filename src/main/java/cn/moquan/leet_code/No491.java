@@ -5,9 +5,7 @@ import cn.moquan.base.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * describe
@@ -54,7 +52,6 @@ public class No491 implements Doing, Log {
         result = new ArrayList<>();
         temp = new LinkedList<>();
         elementArr = nums;
-
         back(0);
 
         return result;
@@ -70,14 +67,16 @@ public class No491 implements Doing, Log {
             return;
         }
 
+        Set<Integer> usedElementSet = new HashSet<>();
         for (int i = index; i < elementArr.length; i++) {
 
-            if (i > index && elementArr[i] == elementArr[i - 1]) {
+            if (usedElementSet.contains(elementArr[i])) {
                 continue;
             }
 
             int newElement = elementArr[i];
             if (temp.isEmpty() || temp.getLast() <= newElement) {
+                usedElementSet.add(newElement);
                 temp.addLast(newElement);
                 back(i + 1);
                 temp.removeLast();
