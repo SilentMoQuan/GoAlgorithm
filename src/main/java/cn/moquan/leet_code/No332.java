@@ -20,7 +20,7 @@ public class No332 implements Doing, Log {
     private static final Logger log = LoggerFactory.getLogger(No332.class);
     private LinkedList<String> temp;
     private List<String> result;
-    private Map<String, LinkedList<List<String>>> map;
+    private Map<String, LinkedList<String>> map;
     private int maxLen = -1;
 
     /**
@@ -28,8 +28,8 @@ public class No332 implements Doing, Log {
      */
     @Override
     public void go() {
-//        log.info("result: {}", findItinerary(Arrays.asList(Arrays.asList("MUC", "LHR"), Arrays.asList("JFK", "MUC"), Arrays.asList("SFO", "SJC"), Arrays.asList("LHR", "SFO"))));
-//        log.info("result: {}", findItinerary(Arrays.asList(Arrays.asList("JFK", "SFO"), Arrays.asList("JFK", "ATL"), Arrays.asList("SFO", "ATL"), Arrays.asList("ATL", "JFK"), Arrays.asList("ATL", "SFO"))));
+        log.info("result: {}", findItinerary(Arrays.asList(Arrays.asList("MUC", "LHR"), Arrays.asList("JFK", "MUC"), Arrays.asList("SFO", "SJC"), Arrays.asList("LHR", "SFO"))));
+        log.info("result: {}", findItinerary(Arrays.asList(Arrays.asList("JFK", "SFO"), Arrays.asList("JFK", "ATL"), Arrays.asList("SFO", "ATL"), Arrays.asList("ATL", "JFK"), Arrays.asList("ATL", "SFO"))));
         log.info("result: {}", findItinerary(new ArrayList<>(Arrays.asList(Arrays.asList("JFK", "SFO"), Arrays.asList("JFK", "ATL"), Arrays.asList("SFO", "JFK"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL"), Arrays.asList("ATL", "AAA"), Arrays.asList("AAA", "BBB"), Arrays.asList("BBB", "ATL")))));
     }
 
@@ -45,7 +45,7 @@ public class No332 implements Doing, Log {
                         Collectors.groupingBy(
                                 list -> list.get(0),
                                 HashMap::new,
-                                Collectors.toCollection(LinkedList::new)
+                                Collectors.mapping(list -> list.get(1), Collectors.toCollection(LinkedList::new))
                         )
                 );
 
@@ -67,13 +67,18 @@ public class No332 implements Doing, Log {
             return;
         }
 
-        LinkedList<List<String>> tickets = map.getOrDefault(start, new LinkedList<>());
+        LinkedList<String> tickets = map.getOrDefault(start, new LinkedList<>());
 
-        ArrayList<List<String>> lists = new ArrayList<>(tickets);
+        ArrayList<String> lists = new ArrayList<>(tickets);
         for (int i = 0; i < lists.size(); i++) {
-            List<String> ticket = lists.get(i);
+            String ticket = lists.get(i);
+
+            if (i > 0 && ticket.equals(lists.get(i - 1))) {
+                continue;
+            }
+
             tickets.remove(ticket);
-            back(ticket.get(1));
+            back(ticket);
             tickets.add(ticket);
         }
 
